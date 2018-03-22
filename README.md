@@ -1,5 +1,5 @@
 # aws_functional_services
 
-Add your own Gradle wrapper and follow the installation of gradle on 
+Install gradle/Use intellij to your preference gradle version
 
-https://gradle.org/install/
+Make sure that you change accesskey and secretkey in the AWSCredential.properties
