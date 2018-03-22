@@ -1,0 +1,13 @@
+
+
+########################################
+# Containing files that will be ignored
+# Add to this list when necessary
+########################################
+.gradle
+.idea
+out
+build
+gradle
+gradlew.bat
+gradlew
