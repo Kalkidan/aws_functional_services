@@ -19,16 +19,17 @@ public class Transcoder {
 
         /************************************************************
          * FIRST STEP IN USING ASW ELASTIC TRANS CODER
-         * Remember to set up credentials @ AWSCredentials.properties
+         * Remember to set up credentials @AWSCredentials.properties
          ************************************************************/
         AWSCredentialsProvider credentialsProvider =    new ClasspathPropertiesFileCredentialsProvider();
         //Get the creds path and values
         Logger.getLogger(LOGGER).info(credentialsProvider.toString());
         Logger.getLogger(LOGGER).info(credentialsProvider.getCredentials().getAWSAccessKeyId());
         Logger.getLogger(LOGGER).info(credentialsProvider.getCredentials().getAWSSecretKey());
+
          //See if the bucket exists and create one if it doesn't exist
         //Please refer to definition of "Key" from AWS
-        if(TextUtils.isEmpty(AmazonS3ClientBuilder.defaultClient().
+        if(TextUtils.isEmpty(AmazonS3ClientBuilder.standard().withCredentials(credentialsProvider).build().
                 getObject("trial-input", "testfolder/2_source_43410_121536.mp4").getBucketName())){
 
             /************************************************
