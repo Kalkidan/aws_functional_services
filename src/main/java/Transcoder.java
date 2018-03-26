@@ -26,7 +26,6 @@ public class Transcoder {
         Logger.getLogger(LOGGER).info(credentialsProvider.toString());
         Logger.getLogger(LOGGER).info(credentialsProvider.getCredentials().getAWSAccessKeyId());
         Logger.getLogger(LOGGER).info(credentialsProvider.getCredentials().getAWSSecretKey());
-
          //See if the bucket exists and create one if it doesn't exist
         //Please refer to definition of "Key" from AWS
         if(TextUtils.isEmpty(AmazonS3ClientBuilder.defaultClient().
@@ -90,6 +89,7 @@ public class Transcoder {
         //TODO:: this can be part of the above for loop, just to be more clear--let it be here, Change as you desire.
         for(Preset customPreset : filteredList){
             switch (customPreset.getName().toString()){
+                //See if we have the preset already created
                 case Constants.FIRST_PRESET_NAME:
                 case Constants.SECOND_PRESET_NAME:
                 case Constants.THIRD_PRESET_NAME:
