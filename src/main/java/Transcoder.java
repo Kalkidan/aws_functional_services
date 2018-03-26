@@ -71,32 +71,50 @@ public class Transcoder {
          *******************************************/
         //A new list to carry the new or presets that have not been created yet
         ListPresetsRequest listPresetsRequest = new ListPresetsRequest();
+
+        //This gives all the paginated presets
         listPresetsRequest.setPageToken(AmazonElasticTranscoderClientBuilder.defaultClient().listPresets().getNextPageToken());
         List<Preset> unfilteredList = AmazonElasticTranscoderClientBuilder.defaultClient().listPresets(listPresetsRequest).getPresets();
+
+        //This gives the first 50 lists
+        unfilteredList.addAll(AmazonElasticTranscoderClientBuilder.defaultClient().listPresets().getPresets());
+        //
         List<Preset> filteredList = new ArrayList<>();
-        List<Preset> newPresetList = new ArrayList<>();
+
         //Filter through the already existing presets
         for(Preset customPreset: Presets.getCustomPresets()){
             filteredList.add(unfilteredList.stream().filter(preset
                     -> preset.getName().equals(customPreset.getName())).findAny().orElse(customPreset));
         }
 
-
-        if(filteredList.size() > 0) {
-            //Create new set of presets
-            //Presets.createPresets(filteredList);
-            CreatePresetRequest createPresetRequest = new CreatePresetRequest();
-            createPresetRequest.setName(filteredList.get(0).getName());
-            //createPresetRequest.set(filteredList.get(0).getId());
-            createPresetRequest.setContainer(filteredList.get(0).getContainer());
-            createPresetRequest.setDescription(filteredList.get(0).getDescription());
-            createPresetRequest.setAudio(filteredList.get(0).getAudio());
-            createPresetRequest.setVideo(filteredList.get(0).getVideo());
-            createPresetRequest.setThumbnails(filteredList.get(0).getThumbnails());
-            //new CreatePresetRequest().setAudio();
-            //AmazonElasticTranscoderClientBuilder.defaultClient().createPreset(createPresetRequest);
-        } else {
-            Logger.getLogger(LOGGER).info("You already have presets created");
+        //TODO:: this can be part of the above for loop, just to be more clear--let it be here, Change as you desire.
+        for(Preset customPreset : filteredList){
+            switch (customPreset.getName().toString()){
+                case Constants.FIRST_PRESET_NAME:
+                case Constants.SECOND_PRESET_NAME:
+                case Constants.THIRD_PRESET_NAME:
+                    Logger.getLogger(LOGGER).info("You already created \t \t :" + customPreset.getName());
+                    break;
+                    default:
+                        Logger.getLogger(LOGGER).info("Creating....\t \t " + customPreset.getName());
+                        createNewPreset(customPreset);
+                        break;
+            }
         }
+    }
+
+    private static void createNewPreset(Preset customPreset) {
+        //Create new set of presets
+        //Presets.createPresets(filteredList);
+        CreatePresetRequest createPresetRequest = new CreatePresetRequest();
+        createPresetRequest.setName(customPreset.getName());
+        //createPresetRequest.set(filteredList.get(0).getId());
+        createPresetRequest.setContainer(customPreset.getContainer());
+        createPresetRequest.setDescription(customPreset.getDescription());
+        createPresetRequest.setAudio(customPreset.getAudio());
+        createPresetRequest.setVideo(customPreset.getVideo());
+        createPresetRequest.setThumbnails(customPreset.getThumbnails());
+        //new CreatePresetRequest().setAudio();
+        //AmazonElasticTranscoderClientBuilder.defaultClient().createPreset(createPresetRequest);
     }
 }

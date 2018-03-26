@@ -7,33 +7,31 @@ import java.util.Map;
 
 public class Presets {
 
-    public static Map<String, Preset> createPresets(List<Preset> presets){
-        Map<String, Preset> presetList = new HashMap<>();
-        for(Preset preset: presets) {
-            presetList.put(preset.getName(), preset);
-        }
-        return presetList;
-    }
 
     public static List<Preset> getCustomPresets(){
 
         List<Preset> presetList = new ArrayList<>();
-
         presetList.add(firstPreset());
         //add(secondPreset());
         //add(thirdPreset());
-
         return presetList;
     }
 
     private static Preset firstPreset() {
         Preset firstPreset = new Preset();
+        //
         firstPreset.setId("123456-jgjg5");
-        firstPreset.setName("first-preset");
+        //TODO:: we will have to find a way for this to make sense when filtering
+        firstPreset.setName(Constants.FIRST_PRESET_NAME);
+        //
         firstPreset.setDescription("This is a description for the first preset!!");
+        //
         firstPreset.setContainer("mp4");
+        //
         firstPreset.setVideo(firsVideoParameters());
+        //
         firstPreset.setAudio(firstAudioParameters());
+        //
         firstPreset.setThumbnails(thumbNailParameter());
         return firstPreset;
     }
@@ -42,19 +40,28 @@ public class Presets {
         Thumbnails thumbnails = new Thumbnails();
         //thumbnails.setAspectRatio("16:9");
         thumbnails.setFormat("png");
+        //
         thumbnails.setInterval("60");
+        //
         thumbnails.setSizingPolicy("ShrinkToFit");
+        //
         thumbnails.setPaddingPolicy("NoPad");
+        //
         thumbnails.setMaxWidth("192");
+        //
         thumbnails.setMaxHeight("144");
         return thumbnails;
     }
 
     private static AudioParameters firstAudioParameters() {
         AudioParameters audioParameters = new AudioParameters();
+        //
         audioParameters.setBitRate("128");
+        //
         audioParameters.setCodec("AAC");
+        //
         audioParameters.setSampleRate("44100");
+        //
         audioParameters.setChannels("2");
 
         //audio codec start
@@ -68,18 +75,31 @@ public class Presets {
     }
 
     private static VideoParameters firsVideoParameters() {
+        //
         VideoParameters videoParameters = new VideoParameters();
+        //
         videoParameters.setCodec("H.264");
+        //
         videoParameters.setCodecOptions(firstVideoCodecOptions());
+        //
         videoParameters.setDisplayAspectRatio("16:9");
+        //
         videoParameters.setBitRate("600");
+        //
         videoParameters.setMaxHeight("1280");
+        //
         videoParameters.setMaxWidth("720");
+        //
         videoParameters.setKeyframesMaxDist("90");
+        //
         videoParameters.setFrameRate("30");
+        //
         videoParameters.setSizingPolicy("Fill");
+        //
         videoParameters.setPaddingPolicy("NoPad");
+        //
         videoParameters.setFixedGOP("true");
+        //
         return videoParameters;
     }
 
@@ -102,11 +122,17 @@ public class Presets {
 
             //For our purposes, this is what we need
             put("Profile", "baseline");
+            //
             put("Level", "3");
+            //
             put("MaxReferenceFrames", "3");
+            //
             put("MaxBitRate", "600");
+            //
             put("BufferSize", "3600");
+            //
             put("InterlacedMode", "Progressive");
+            //
             put("ColorSpaceConversion", "None");
 
 
@@ -115,37 +141,56 @@ public class Presets {
 
     private static Preset secondPreset(){
         Preset secondPreset = new Preset();
+        //
         secondPreset.setVideo(secondVideoParameters());
+        //
         secondPreset.setAudio(secondAudioParameters());
+        //
         secondPreset.setThumbnails(thumbNailParameter());
         return secondPreset;
     }
 
     private static VideoParameters secondVideoParameters(){
         VideoParameters videoParameters = new VideoParameters();
+        //
         videoParameters.setAspectRatio("");
+        //
         videoParameters.setBitRate("");
+        //
         videoParameters.setCodec("");
+        //
         videoParameters.setMaxHeight("");
+        //
         videoParameters.setMaxWidth("");
+        //
         return videoParameters;
     }
 
     private static AudioParameters secondAudioParameters() {
         AudioParameters audioParameters = new AudioParameters();
+        //
         audioParameters.setAudioPackingMode("");
+        //
         audioParameters.setBitRate("");
+        //
         audioParameters.setCodec("");
+        //
         audioParameters.setSampleRate("");
+        //
         audioParameters.setChannels("");
+        //
         return audioParameters;
     }
 
     private static Preset thirdPreset(){
         Preset thirdPreset = new Preset();
+        //
         thirdPreset.setVideo(thirdVideoParameters());
+        //
         thirdPreset.setAudio(thirdAudioParameters());
+        //
         thirdPreset.setThumbnails(thumbNailParameter());
+        //
         return thirdPreset;
 
     }
