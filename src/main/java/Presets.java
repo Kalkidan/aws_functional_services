@@ -8,6 +8,7 @@ import java.util.Map;
 public class Presets {
 
 
+    //Pre-defined Custom presets.
     public static List<Preset> getCustomPresets(){
 
         List<Preset> presetList = new ArrayList<>();
@@ -17,6 +18,7 @@ public class Presets {
         return presetList;
     }
 
+    //First Preset.
     private static Preset firstPreset() {
         Preset firstPreset = new Preset();
         //
@@ -24,9 +26,9 @@ public class Presets {
         //TODO:: we will have to find a way for this to make sense when filtering
         firstPreset.setName(Constants.FIRST_PRESET_NAME);
         //
-        firstPreset.setDescription("This is a description for the first preset!!");
+        firstPreset.setDescription(Constants.FIRST_PRESET_DESCTIPTION);
         //
-        firstPreset.setContainer("mp4");
+        firstPreset.setContainer(Constants.FIRS_PRESET_CONTAINER);
         //
         firstPreset.setVideo(firsVideoParameters());
         //
@@ -78,7 +80,7 @@ public class Presets {
         //
         VideoParameters videoParameters = new VideoParameters();
         //
-        videoParameters.setCodec("H.264");
+        videoParameters.setCodec(Constants.FIRS_PRESET_VIDEO_CODEC);
         //
         videoParameters.setCodecOptions(firstVideoCodecOptions());
         //
