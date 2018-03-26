@@ -1,7 +1,10 @@
 import com.amazonaws.auth.AWSCredentialsProvider;
+
 import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.services.elastictranscoder.AmazonElasticTranscoder;
 import com.amazonaws.services.elastictranscoder.AmazonElasticTranscoderClientBuilder;
 import com.amazonaws.services.elastictranscoder.model.*;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -27,31 +30,39 @@ public class Transcoder {
         Logger.getLogger(LOGGER).info(credentialsProvider.getCredentials().getAWSAccessKeyId());
         Logger.getLogger(LOGGER).info(credentialsProvider.getCredentials().getAWSSecretKey());
 
+        //Get the S3 instance
+        AmazonS3 amazonS3 = AmazonS3ClientBuilder.standard().withCredentials(credentialsProvider).build();
+
          //See if the bucket exists and create one if it doesn't exist
         //Please refer to definition of "Key" from AWS
-        if(TextUtils.isEmpty(AmazonS3ClientBuilder.standard().withCredentials(credentialsProvider).build().
+        if(TextUtils.isEmpty(amazonS3.
                 getObject("trial-input", "testfolder/2_source_43410_121536.mp4").getBucketName())){
 
             /************************************************
              *****STEP TWO--SEE IF YOU HAVE THE BUCKETS*****
              *********************************************/
             //Step 1. Create input bucket
-            AmazonS3ClientBuilder.defaultClient().createBucket("trial-input");
+            amazonS3.createBucket("trial-input");
             //Step 2. Create an output bucket
-            AmazonS3ClientBuilder.defaultClient().createBucket("trial-output");
+            amazonS3.createBucket("trial-output");
             //Step 3. Upload your file to the S3 bucket
-            AmazonS3ClientBuilder.defaultClient().putObject(
+            amazonS3.putObject(
                     new PutObjectRequest("trial-input", "testfolder/2_source_43410_121536.mp4",
                             new File("/Users/kaltadesse/Downloads/2_source_43410_121536.mp4")).
                             withCannedAcl(CannedAccessControlList.PublicReadWrite));
 
         } else { }
 
+
         /*****************************************************************
          * ******************STEP THREE -- CREATE THE PIPELINE **********
          ***************************************************************/
+
+        AmazonElasticTranscoder elasticTranscoder =
+                AmazonElasticTranscoderClientBuilder.standard().withCredentials(
+                        new ClasspathPropertiesFileCredentialsProvider()).build();
         //See if our pipeline exists
-        for(Pipeline ppl: AmazonElasticTranscoderClientBuilder.defaultClient().listPipelines().getPipelines()) {
+        for(Pipeline ppl: elasticTranscoder.listPipelines().getPipelines()) {
             if ("new-pipeline".equalsIgnoreCase(ppl.getName())) {
                 //Pipe line exists
                 break;
@@ -73,11 +84,11 @@ public class Transcoder {
         ListPresetsRequest listPresetsRequest = new ListPresetsRequest();
 
         //This gives all the paginated presets
-        listPresetsRequest.setPageToken(AmazonElasticTranscoderClientBuilder.defaultClient().listPresets().getNextPageToken());
-        List<Preset> unfilteredList = AmazonElasticTranscoderClientBuilder.defaultClient().listPresets(listPresetsRequest).getPresets();
+        listPresetsRequest.setPageToken(elasticTranscoder.listPresets().getNextPageToken());
+        List<Preset> unfilteredList = elasticTranscoder.listPresets(listPresetsRequest).getPresets();
 
         //This gives the first 50 lists
-        unfilteredList.addAll(AmazonElasticTranscoderClientBuilder.defaultClient().listPresets().getPresets());
+        unfilteredList.addAll(elasticTranscoder.listPresets().getPresets());
         //
         List<Preset> filteredList = new ArrayList<>();
 
