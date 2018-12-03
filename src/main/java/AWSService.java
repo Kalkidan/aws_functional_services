@@ -1,3 +1,4 @@
+import javax.jms.JMSException;
 
 /**
  * This work is based on research that the aws java sdk documetation
@@ -7,7 +8,8 @@
 
 public class AWSService {
 
-    public static void main(String[] args){
-        Transcoder.launchTranscoder();
+    public static void main(String[] args) throws JMSException, InterruptedException {
+        //Start Transcoding Job
+        new Transcoder().launchTranscoder(args);
     }
 }
